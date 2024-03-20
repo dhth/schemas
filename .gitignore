@@ -1,0 +1,8 @@
+schemas
+.quickrun
+cosign.key
+cosign.pub
+debug.log
+justfile
+.quickrun
+.air.toml
