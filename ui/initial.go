@@ -56,8 +56,7 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 		PaddingTop(1)
 
 	columnDetailsTitleStyle := baseStyle.Copy().
-		Bold(true).
-		Background(lipgloss.Color("#d3869b"))
+		Bold(true)
 
 	m := model{
 		dbPool:                  dbPool,
@@ -72,10 +71,8 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 	m.tablesList.SetStatusBarItemName("table", "tables")
 	m.tablesList.DisableQuitKeybindings()
 	m.tablesList.SetShowHelp(false)
-	m.tablesList.Styles.Title.Background(lipgloss.Color("#b8bb26"))
 	m.tablesList.Styles.Title.Foreground(lipgloss.Color("#282828"))
 	m.tablesList.Styles.Title.Bold(true)
-	m.tablesList.Styles.Title.Underline(true)
 
 	return m
 }

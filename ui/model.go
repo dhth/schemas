@@ -9,11 +9,12 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type activePane uint
+type Pane uint
 
 const (
-	tablesList activePane = iota
+	tablesList Pane = iota
 	columnDetails
+	numPanes
 )
 
 type model struct {
@@ -28,7 +29,9 @@ type model struct {
 	tableListStyle          lipgloss.Style
 	columnDetailsStyle      lipgloss.Style
 	columnDetailsTitleStyle lipgloss.Style
-	activePane              activePane
+	activePane              Pane
+	lastPane                Pane
+	fullScreenPane          bool
 }
 
 func (m model) Init() tea.Cmd {

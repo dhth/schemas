@@ -18,31 +18,40 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			fs := m.tablesList.FilterState()
 			if fs == list.Filtering || fs == list.FilterApplied {
 				m.tablesList.ResetFilter()
+			} else if m.fullScreenPane {
+				m.fullScreenPane = false
+				m.activePane = m.lastPane
 			} else {
 				return m, tea.Quit
 			}
 		case "tab", "shift+tab":
 			if m.activePane == tablesList {
 				m.activePane = columnDetails
-				m.columnDetailsTitleStyle.Underline(true)
-				m.tablesList.Styles.Title.Underline(false)
 			} else {
 				m.activePane = tablesList
-				m.columnDetailsTitleStyle.Underline(false)
-				m.tablesList.Styles.Title.Underline(true)
+			}
+		case "1":
+			if !m.fullScreenPane {
+				m.lastPane = m.activePane
+				m.fullScreenPane = true
+				m.activePane = columnDetails
+				m.columns.SetHeight(m.terminalHeight - 7)
+			} else {
+				m.fullScreenPane = false
+				m.activePane = m.lastPane
+				m.columns.SetHeight(m.terminalHeight - 12)
 			}
 		}
 
 	case tea.WindowSizeMsg:
 		w1, h1 := m.tableListStyle.GetFrameSize()
-		w2, h2 := m.columnDetailsStyle.GetFrameSize()
 		m.terminalWidth = msg.Width
 		m.terminalHeight = msg.Height
 		m.tablesList.SetHeight(msg.Height - h1 - 2)
 		m.tablesList.SetWidth(int(float64(msg.Width-w1) * 0.3))
-		m.columns.SetHeight(msg.Height - h2 - 11)
-		// 11 keeps the column table's lower end at the same level as the table list
-		m.tablesList.SetWidth(int(float64(msg.Width-w2) * 0.7))
+		m.columns.SetHeight(msg.Height - 12)
+		// 12 keeps the column table's lower end at the same level as the table list
+		m.tablesList.SetWidth(int(float64(msg.Width) * 0.7))
 		m.tableListStyle = m.tableListStyle.Width(int(float64(msg.Width) * 0.3))
 		m.columnDetailsStyle = m.columnDetailsStyle.Width(int(float64(msg.Width) * 0.7))
 	case TablesFetchedMsg:
