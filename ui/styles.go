@@ -14,4 +14,8 @@ var (
 			Align(lipgloss.Center).
 			Bold(true).
 			Background(lipgloss.Color("#b8bb26"))
+
+	helpMsgStyle = baseStyle.Copy().
+			Bold(true).
+			Foreground(lipgloss.Color("#83a598"))
 )

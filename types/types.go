@@ -13,6 +13,12 @@ type ColumnDetails struct {
 	IsNullable string `db:"is_nullable"`
 }
 
+type TableConstraint struct {
+	Name        string  `db:"constraint_name"`
+	Type        string  `db:"constraint_type"`
+	CheckClause *string `db:"check_clause"`
+}
+
 func (table Table) Title() string {
 	return fmt.Sprintf("%s", table.Name)
 }

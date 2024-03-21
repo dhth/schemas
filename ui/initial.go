@@ -15,13 +15,14 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 	var appDelegateKeys = newAppDelegateKeyMap()
 	appDelegate := newAppItemDelegate(appDelegateKeys)
 
-	tableCols := []table.Column{
+	// column details
+	colTblCols := []table.Column{
 		{Title: "Name", Width: 30},
 		{Title: "Data Type", Width: 30},
 		{Title: "Nullable", Width: 8},
 	}
 	columnsTable := table.New(
-		table.WithColumns(tableCols),
+		table.WithColumns(colTblCols),
 		table.WithFocused(true),
 		table.WithHeight(8),
 	)
@@ -38,6 +39,22 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 	columnsTable.SetStyles(s)
 
 	columnsCache := make(map[string][]types.ColumnDetails)
+
+	// constraints
+	constraintsTblCols := []table.Column{
+		{Title: "Name", Width: 30},
+		{Title: "Type", Width: 12},
+		{Title: "Check Clause", Width: 40},
+	}
+	constraintsTbl := table.New(
+		table.WithColumns(constraintsTblCols),
+		table.WithFocused(true),
+		table.WithHeight(8),
+	)
+
+	constraintsTbl.SetStyles(s)
+
+	constraintsCache := make(map[string][]types.TableConstraint)
 
 	baseStyle = lipgloss.NewStyle().
 		PaddingLeft(1).
@@ -63,9 +80,15 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 		tablesList:              list.New(stackItems, appDelegate, 0, 0),
 		columns:                 columnsTable,
 		columnsCache:            columnsCache,
+		constraints:             constraintsTbl,
+		constraintsCache:        constraintsCache,
 		tableListStyle:          tableListStyle,
 		columnDetailsStyle:      columnDetailsStyle,
 		columnDetailsTitleStyle: columnDetailsTitleStyle,
+		constraintsStyle:        columnDetailsStyle.Copy(),
+		constraintsTitleStyle:   columnDetailsTitleStyle.Copy(),
+		activeRHSPane:           columnDetails,
+		showHelp:                true,
 	}
 	m.tablesList.Title = "Tables"
 	m.tablesList.SetStatusBarItemName("table", "tables")

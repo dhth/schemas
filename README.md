@@ -25,6 +25,18 @@ brew install dhth/tap/schemas
 go install github.com/dhth/schemas@latest
 ```
 
+⚡️ Usage
+---
+
+```bash
+DATABASE_ADDRESS='ABC' \
+DATABASE_PORT='ABC' \
+DATABASE_USERNAME='ABC' \
+DATABASE_PASSWORD='ABC' \
+DATABASE_DBNAME='ABC' \
+schemas
+```
+
 Acknowledgements
 ---
 
