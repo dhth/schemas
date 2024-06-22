@@ -20,7 +20,7 @@ type TableConstraint struct {
 }
 
 func (table Table) Title() string {
-	return fmt.Sprintf("%s", table.Name)
+	return table.Name
 }
 
 func (table Table) Description() string {

@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	INACTIVE_PANE_TITLE_COLOR = lipgloss.Color("#7c6f64")
-	ACTIVE_PANE_TITLE_COLOR   = lipgloss.Color("#b8bb26")
+	inactivePaneTitleColor = lipgloss.Color("#7c6f64")
+	activePaneTitleColor   = lipgloss.Color("#b8bb26")
 )
 
 func (m model) View() string {
@@ -20,26 +20,26 @@ func (m model) View() string {
 		statusBar = RightPadTrim(m.message, m.terminalWidth)
 	}
 
-	m.tablesList.Styles.Title.Background(INACTIVE_PANE_TITLE_COLOR)
-	m.columnDetailsTitleStyle.Background(INACTIVE_PANE_TITLE_COLOR)
-	m.constraintsTitleStyle.Background(INACTIVE_PANE_TITLE_COLOR)
+	m.tablesList.Styles.Title = m.tablesList.Styles.Title.Background(inactivePaneTitleColor)
+	m.columnDetailsTitleStyle = m.columnDetailsTitleStyle.Background(inactivePaneTitleColor)
+	m.constraintsTitleStyle = m.constraintsTitleStyle.Background(inactivePaneTitleColor)
 
 	switch m.activePane {
 	case tablesList:
-		m.tablesList.Styles.Title.Background(ACTIVE_PANE_TITLE_COLOR)
+		m.tablesList.Styles.Title = m.tablesList.Styles.Title.Background(activePaneTitleColor)
 	case columnDetails:
-		m.columnDetailsTitleStyle.Background(ACTIVE_PANE_TITLE_COLOR)
+		m.columnDetailsTitleStyle = m.columnDetailsTitleStyle.Background(activePaneTitleColor)
 	case tableConstraints:
-		m.constraintsTitleStyle.Background(ACTIVE_PANE_TITLE_COLOR)
+		m.constraintsTitleStyle = m.constraintsTitleStyle.Background(activePaneTitleColor)
 	}
 
 	switch m.fullScreenPane {
 	case true:
 		switch m.activeRHSPane {
 		case columnDetails:
-			content = m.columnDetailsStyle.Copy().Width(m.terminalWidth).PaddingLeft(3).Render(m.columnDetailsTitleStyle.Render("Columns") + "\n\n" + m.columns.View())
+			content = m.columnDetailsStyle.Width(m.terminalWidth).PaddingLeft(3).Render(m.columnDetailsTitleStyle.Render("Columns") + "\n\n" + m.columns.View())
 		case tableConstraints:
-			content = m.constraintsStyle.Copy().Width(m.terminalWidth).PaddingLeft(3).Render(m.constraintsTitleStyle.Render("Constraints") + "\n\n" + m.constraints.View())
+			content = m.constraintsStyle.Width(m.terminalWidth).PaddingLeft(3).Render(m.constraintsTitleStyle.Render("Constraints") + "\n\n" + m.constraints.View())
 		}
 	case false:
 		var rhsView string

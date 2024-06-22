@@ -10,12 +10,12 @@ var (
 			PaddingRight(1).
 			Foreground(lipgloss.Color("#282828"))
 
-	modeStyle = baseStyle.Copy().
+	modeStyle = baseStyle.
 			Align(lipgloss.Center).
 			Bold(true).
 			Background(lipgloss.Color("#b8bb26"))
 
-	helpMsgStyle = baseStyle.Copy().
+	helpMsgStyle = baseStyle.
 			Bold(true).
 			Foreground(lipgloss.Color("#83a598"))
 )

@@ -31,7 +31,7 @@ brews:
     repository:
       owner: dhth
       name: homebrew-tap
-    folder: Formula
+    directory: Formula
     license: MIT
     homepage: "https://github.com/dhth/schemas"
     description: "Inspect postgres schemas in the terminal"

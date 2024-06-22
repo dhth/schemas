@@ -61,7 +61,7 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 		PaddingRight(1).
 		Foreground(lipgloss.Color("#282828"))
 
-	tableListStyle := baseStyle.Copy().
+	tableListStyle := baseStyle.
 		PaddingTop(1).
 		PaddingRight(2).
 		PaddingLeft(1).
@@ -72,7 +72,7 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 		PaddingRight(1).
 		PaddingTop(1)
 
-	columnDetailsTitleStyle := baseStyle.Copy().
+	columnDetailsTitleStyle := baseStyle.
 		Bold(true)
 
 	m := model{
@@ -85,8 +85,8 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 		tableListStyle:          tableListStyle,
 		columnDetailsStyle:      columnDetailsStyle,
 		columnDetailsTitleStyle: columnDetailsTitleStyle,
-		constraintsStyle:        columnDetailsStyle.Copy(),
-		constraintsTitleStyle:   columnDetailsTitleStyle.Copy(),
+		constraintsStyle:        columnDetailsStyle,
+		constraintsTitleStyle:   columnDetailsTitleStyle,
 		activeRHSPane:           columnDetails,
 		showHelp:                true,
 	}
@@ -94,8 +94,7 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 	m.tablesList.SetStatusBarItemName("table", "tables")
 	m.tablesList.DisableQuitKeybindings()
 	m.tablesList.SetShowHelp(false)
-	m.tablesList.Styles.Title.Foreground(lipgloss.Color("#282828"))
-	m.tablesList.Styles.Title.Bold(true)
+	m.tablesList.Styles.Title = m.tablesList.Styles.Title.Foreground(lipgloss.Color("#282828")).Bold(true)
 
 	return m
 }

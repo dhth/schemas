@@ -46,6 +46,6 @@ type model struct {
 func (m model) Init() tea.Cmd {
 	return tea.Batch(
 		fetchTables(m.dbPool),
-		hideHelp(time.Second*15),
+		hideHelp(time.Minute*1),
 	)
 }
