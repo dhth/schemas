@@ -3,7 +3,7 @@
 ✨ Overview
 ---
 
-Inspect schemas of postgres tables in the terminal.
+`schemas` lets you inspect schemas of postgres tables via a TUI.
 
 <p align="center">
   <img src="./schemas.gif?raw=true" alt="Usage" />
