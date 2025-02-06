@@ -1,7 +1,9 @@
 # schemas
 
-✨ Overview
----
+[![Build Workflow Status](https://img.shields.io/github/actions/workflow/status/dhth/schemas/build.yml?style=flat-square)](https://github.com/dhth/schemas/actions/workflows/build.yml)
+[![Vulncheck Workflow Status](https://img.shields.io/github/actions/workflow/status/dhth/schemas/vulncheck.yml?style=flat-square&label=vulncheck)](https://github.com/dhth/schemas/actions/workflows/vulncheck.yml)
+[![Latest Release](https://img.shields.io/github/release/dhth/schemas.svg?style=flat-square)](https://github.com/dhth/schemas/releases/latest)
+[![Commits Since Latest Release](https://img.shields.io/github/commits-since/dhth/schemas/latest?style=flat-square)](https://github.com/dhth/schemas/releases)
 
 `schemas` lets you inspect schemas of postgres tables via a TUI.
 

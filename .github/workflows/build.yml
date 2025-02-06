@@ -7,13 +7,13 @@ on:
     paths:
       - "go.*"
       - "**/*.go"
-      - ".github/workflows/*.yml"
+      - ".github/workflows/build.yml"
 
 permissions:
   contents: read
 
 env:
-  GO_VERSION: '1.23.0'
+  GO_VERSION: '1.23.5'
 
 jobs:
   build:
@@ -30,4 +30,4 @@ jobs:
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v6
       with:
-        version: v1.60
+        version: v1.63
