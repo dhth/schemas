@@ -2,7 +2,8 @@ package db
 
 import (
 	"context"
-	"github.com/dhth/schemas/types"
+
+	"github.com/dhth/schemas/internal/types"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -15,7 +16,6 @@ AND table_name = $1
 ORDER BY column_name;
 `
 	rowsResult, err := dbpool.Query(context.Background(), selectQuery, tableName)
-
 	if err != nil {
 		return nil, err
 	}

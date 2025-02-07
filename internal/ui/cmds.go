@@ -4,7 +4,7 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/dhth/schemas/db"
+	"github.com/dhth/schemas/internal/db"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 

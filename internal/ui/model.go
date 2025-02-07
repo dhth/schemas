@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/dhth/schemas/types"
+	"github.com/dhth/schemas/internal/types"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -20,7 +20,7 @@ const (
 	numPanes
 )
 
-type model struct {
+type Model struct {
 	dbPool                  *pgxpool.Pool
 	tablesList              list.Model
 	columns                 table.Model
@@ -43,7 +43,7 @@ type model struct {
 	showHelp                bool
 }
 
-func (m model) Init() tea.Cmd {
+func (m Model) Init() tea.Cmd {
 	return tea.Batch(
 		fetchTables(m.dbPool),
 		hideHelp(time.Minute*1),
