@@ -1,6 +1,6 @@
 module github.com/dhth/schemas
 
-go 1.23.5
+go 1.23.6
 
 require (
 	github.com/charmbracelet/bubbles v0.20.0
