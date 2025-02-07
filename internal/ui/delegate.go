@@ -31,9 +31,9 @@ func newAppItemDelegate(keys *delegateKeyMap) list.DefaultDelegate {
 		SelectedTitle
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
-		switch msgType := msg.(type) {
+		switch msgType := msg.(type) { // nolint:revive
 		case tea.KeyMsg:
-			switch {
+			switch { // nolint:revive
 			case key.Matches(msgType,
 				keys.choose,
 				list.DefaultKeyMap().CursorUp,
@@ -45,6 +45,7 @@ func newAppItemDelegate(keys *delegateKeyMap) list.DefaultDelegate {
 				return chooseTableEntry(m.SelectedItem().FilterValue())
 			}
 		}
+
 		return nil
 	}
 

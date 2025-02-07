@@ -1,13 +1,35 @@
 package cmd
 
 import (
-	"github.com/dhth/schemas/db"
-	"github.com/dhth/schemas/ui"
+	"flag"
+	"fmt"
+	"os"
+
+	"github.com/dhth/schemas/internal/db"
+	"github.com/dhth/schemas/internal/ui"
 )
 
-func Execute() {
-	dbPool := db.CreateDBPool()
+func Execute() error {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, `Inspect postgres schemas via a TUI.
+
+schemas needs the following environment variables to be set:
+- DATABASE_ADDRESS 
+- DATABASE_PORT
+- DATABASE_USERNAME
+- DATABASE_PASSWORD
+- DATABASE_DBNAME
+`)
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
+	dbPool, err := db.CreateDBPool()
+	if err != nil {
+		return err
+	}
+
 	defer dbPool.Close()
 
-	ui.RenderUI(dbPool)
+	return ui.RenderUI(dbPool)
 }

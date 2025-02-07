@@ -11,14 +11,9 @@ const (
 	activePaneTitleColor   = lipgloss.Color("#b8bb26")
 )
 
-func (m model) View() string {
+func (m Model) View() string {
 	var content string
 	var footer string
-
-	var statusBar string
-	if m.message != "" {
-		statusBar = RightPadTrim(m.message, m.terminalWidth)
-	}
 
 	m.tablesList.Styles.Title = m.tablesList.Styles.Title.Background(inactivePaneTitleColor)
 	m.columnDetailsTitleStyle = m.columnDetailsTitleStyle.Background(inactivePaneTitleColor)
@@ -72,7 +67,7 @@ func (m model) View() string {
 
 	return lipgloss.JoinVertical(lipgloss.Left,
 		content,
-		statusBar,
+		m.message,
 		footer,
 	)
 }

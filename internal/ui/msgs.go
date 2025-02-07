@@ -1,6 +1,6 @@
 package ui
 
-import "github.com/dhth/schemas/types"
+import "github.com/dhth/schemas/internal/types"
 
 type HideHelpMsg struct{}
 

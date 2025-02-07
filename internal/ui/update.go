@@ -6,7 +6,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	var cmds []tea.Cmd
 	m.message = ""
@@ -16,13 +16,21 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "ctrl+c", "q":
 			fs := m.tablesList.FilterState()
-			if fs == list.Filtering || fs == list.FilterApplied {
+			if fs == list.Filtering {
+				break
+			} else if fs == list.FilterApplied {
 				m.tablesList.ResetFilter()
 			} else if m.fullScreenPane {
 				m.fullScreenPane = false
 				m.activePane = m.lastPane
 			} else {
-				return m, tea.Quit
+				switch m.activePane {
+				case columnDetails, tableConstraints:
+					m.activePane = tablesList
+					m.lastPane = m.activePane
+				default:
+					return m, tea.Quit
+				}
 			}
 		case "1":
 			if !m.fullScreenPane {
@@ -61,10 +69,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				switch m.activeRHSPane {
 				case columnDetails:
 					m.activePane = columnDetails
-					m.columns.SetHeight(m.terminalHeight - 7)
+					m.columns.SetHeight(m.terminalHeight - 5)
 				case tableConstraints:
 					m.activePane = tableConstraints
-					m.constraints.SetHeight(m.terminalHeight - 7)
+					m.constraints.SetHeight(m.terminalHeight - 5)
 				}
 			} else {
 				m.fullScreenPane = false
@@ -98,16 +106,17 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			message := "error fetching tables: " + msg.err.Error()
 			m.message = message
 			m.messages = append(m.messages, message)
-		} else {
-			tableList := make([]list.Item, 0, len(msg.tables))
-			for _, table := range msg.tables {
-				tableList = append(tableList, table)
-			}
-			m.tablesList.SetItems(tableList)
+			break
+		}
 
-			if len(msg.tables) > 0 {
-				cmds = append(cmds, chooseTableEntry(msg.tables[0].Name))
-			}
+		tableList := make([]list.Item, 0, len(msg.tables))
+		for _, table := range msg.tables {
+			tableList = append(tableList, table)
+		}
+		m.tablesList.SetItems(tableList)
+
+		if len(msg.tables) > 0 {
+			cmds = append(cmds, chooseTableEntry(msg.tables[0].Name))
 		}
 	case TableChosenMsg:
 		switch m.activeRHSPane {
@@ -115,49 +124,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cacheData, ok := m.columnsCache[msg.tableName]
 			if !ok {
 				cmds = append(cmds, fetchTableDetails(m.dbPool, msg.tableName))
-			} else {
-				var rows []table.Row
-				for _, column := range cacheData {
-					rows = append(rows,
-						table.Row{
-							column.Name,
-							column.DataType,
-							column.IsNullable,
-						})
-				}
-				m.columns.SetRows(rows)
-				m.columns.GotoTop()
+				break
 			}
-		case tableConstraints:
-			cacheData, ok := m.constraintsCache[msg.tableName]
-			if !ok {
-				cmds = append(cmds, fetchTableConstraints(m.dbPool, msg.tableName))
-			} else {
-				var rows []table.Row
-				for _, column := range cacheData {
-					var checkClause string
-					if column.CheckClause != nil {
-						checkClause = *column.CheckClause
-					}
-					rows = append(rows,
-						table.Row{
-							column.Name,
-							column.Type,
-							checkClause,
-						})
-				}
-				m.constraints.SetRows(rows)
-				m.constraints.GotoTop()
-			}
-		}
-	case TableDetailsFetchedMsg:
-		if msg.err != nil {
-			message := "error fetching table details: " + msg.err.Error()
-			m.message = message
-			m.messages = append(m.messages, message)
-		} else {
+
 			var rows []table.Row
-			for _, column := range msg.columns {
+			for _, column := range cacheData {
 				rows = append(rows,
 					table.Row{
 						column.Name,
@@ -167,16 +138,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.columns.SetRows(rows)
 			m.columns.GotoTop()
-			m.columnsCache[msg.tableName] = msg.columns
-		}
-	case TableConstraintsFetchedMsg:
-		if msg.err != nil {
-			message := "error fetching table details: " + msg.err.Error()
-			m.message = message
-			m.messages = append(m.messages, message)
-		} else {
+		case tableConstraints:
+			cacheData, ok := m.constraintsCache[msg.tableName]
+			if !ok {
+				cmds = append(cmds, fetchTableConstraints(m.dbPool, msg.tableName))
+				break
+			}
+
 			var rows []table.Row
-			for _, column := range msg.constraints {
+			for _, column := range cacheData {
 				var checkClause string
 				if column.CheckClause != nil {
 					checkClause = *column.CheckClause
@@ -190,8 +160,51 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.constraints.SetRows(rows)
 			m.constraints.GotoTop()
-			m.constraintsCache[msg.tableName] = msg.constraints
 		}
+	case TableDetailsFetchedMsg:
+		if msg.err != nil {
+			message := "error fetching table details: " + msg.err.Error()
+			m.message = message
+			m.messages = append(m.messages, message)
+			break
+		}
+
+		var rows []table.Row
+		for _, column := range msg.columns {
+			rows = append(rows,
+				table.Row{
+					column.Name,
+					column.DataType,
+					column.IsNullable,
+				})
+		}
+		m.columns.SetRows(rows)
+		m.columns.GotoTop()
+		m.columnsCache[msg.tableName] = msg.columns
+	case TableConstraintsFetchedMsg:
+		if msg.err != nil {
+			message := "error fetching table details: " + msg.err.Error()
+			m.message = message
+			m.messages = append(m.messages, message)
+			break
+		}
+
+		var rows []table.Row
+		for _, column := range msg.constraints {
+			var checkClause string
+			if column.CheckClause != nil {
+				checkClause = *column.CheckClause
+			}
+			rows = append(rows,
+				table.Row{
+					column.Name,
+					column.Type,
+					checkClause,
+				})
+		}
+		m.constraints.SetRows(rows)
+		m.constraints.GotoTop()
+		m.constraintsCache[msg.tableName] = msg.constraints
 	}
 
 	switch m.activePane {

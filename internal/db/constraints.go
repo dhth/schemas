@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 
-	"github.com/dhth/schemas/types"
+	"github.com/dhth/schemas/internal/types"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -21,7 +21,6 @@ WHERE table_schema = 'public'
 ORDER BY c.constraint_type;
 `
 	rowsResult, err := dbpool.Query(context.Background(), selectQuery, tableName)
-
 	if err != nil {
 		return nil, err
 	}

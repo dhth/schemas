@@ -4,15 +4,14 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/table"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/dhth/schemas/types"
+	"github.com/dhth/schemas/internal/types"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func InitialModel(dbPool *pgxpool.Pool) model {
-
+func InitialModel(dbPool *pgxpool.Pool) Model {
 	stackItems := make([]list.Item, 0)
 
-	var appDelegateKeys = newAppDelegateKeyMap()
+	appDelegateKeys := newAppDelegateKeyMap()
 	appDelegate := newAppItemDelegate(appDelegateKeys)
 
 	// column details
@@ -75,7 +74,7 @@ func InitialModel(dbPool *pgxpool.Pool) model {
 	columnDetailsTitleStyle := baseStyle.
 		Bold(true)
 
-	m := model{
+	m := Model{
 		dbPool:                  dbPool,
 		tablesList:              list.New(stackItems, appDelegate, 0, 0),
 		columns:                 columnsTable,

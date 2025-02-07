@@ -1,7 +1,16 @@
 package main
 
-import "github.com/dhth/schemas/cmd"
+import (
+	"fmt"
+	"os"
+
+	"github.com/dhth/schemas/cmd"
+)
 
 func main() {
-	cmd.Execute()
+	err := cmd.Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+		os.Exit(1)
+	}
 }
