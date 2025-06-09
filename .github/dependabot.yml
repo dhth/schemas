@@ -4,23 +4,15 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "saturday"
     labels:
       - "dependencies"
     commit-message:
-      prefix: "chore"
-      include: "scope"
-    reviewers:
-      - "dhth"
+      prefix: "build"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "saturday"
     labels:
       - "dependencies"
     commit-message:
-      prefix: "chore"
-      include: "scope"
-    reviewers:
-      - "dhth"
+      prefix: "ci"
