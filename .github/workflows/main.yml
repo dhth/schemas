@@ -15,6 +15,7 @@ jobs:
       contents: read
     outputs:
       code: ${{ steps.filter.outputs.code }}
+      deps: ${{ steps.filter.outputs.deps }}
       release: ${{ steps.filter.outputs.release }}
       workflows: ${{ steps.filter.outputs.workflows }}
       yml: ${{ steps.filter.outputs.yml }}
@@ -32,6 +33,10 @@ jobs:
               - ".golangci.yml"
               - "main.go"
               - ".github/actions/**"
+              - ".github/workflows/main.yml"
+            deps:
+              - "go.mod"
+              - "go.sum"
               - ".github/workflows/main.yml"
             release:
               - ".goreleaser.yml"
@@ -119,3 +124,14 @@ jobs:
         with:
           version: 'v2.9.0'
           args: check
+
+  vulncheck:
+    needs: changes
+    if: ${{ needs.changes.outputs.deps == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: dhth/composite-actions/.github/actions/govulncheck@main
+        with:
+          go-version: ${{ env.GO_VERSION }}
