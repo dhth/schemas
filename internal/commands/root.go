@@ -22,7 +22,7 @@ schemas needs the following environment variables to be set:
 `)
 		flag.PrintDefaults()
 	}
-	flag.Parse()
+	flag.Parse() // nolint
 
 	dbPool, err := db.CreateDBPool()
 	if err != nil {
