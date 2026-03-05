@@ -3,7 +3,7 @@ package ui
 import (
 	"os"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -16,7 +16,7 @@ func RenderUI(dbPool *pgxpool.Pool) error {
 		defer f.Close()
 	}
 
-	p := tea.NewProgram(InitialModel(dbPool), tea.WithAltScreen())
+	p := tea.NewProgram(InitialModel(dbPool))
 	_, err := p.Run()
 	return err
 }

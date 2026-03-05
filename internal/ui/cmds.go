@@ -3,7 +3,7 @@ package ui
 import (
 	"time"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/dhth/schemas/internal/db"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
