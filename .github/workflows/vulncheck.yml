@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v6.0.2
       - uses: dhth/composite-actions/.github/actions/govulncheck@main
         with:
           go-version-file: 'go.mod'
